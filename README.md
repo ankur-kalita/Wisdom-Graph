@@ -1,38 +1,29 @@
-# AI Learning Map 🧠
+# Wisdom Graph 🧠
 
-An intelligent, interactive web application that transforms any topic into a structured, visual learning journey. Powered by AI (OpenAI GPT-4o) to help users explore complex subjects through interactive node-based maps.
+An intelligent, interactive web application that transforms any topic into a structured, visual learning journey. Powered by AI (OpenAI GPT-4o) to help users explore complex subjects through interactive node-based maps with drag-and-drop customization.
 
-![AI Learning Map](https://img.shields.io/badge/AI-Powered-blue) ![React](https://img.shields.io/badge/React-19.0-61dafb) ![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688) ![MongoDB](https://img.shields.io/badge/MongoDB-4.5-47A248)
+![Wisdom Graph](https://img.shields.io/badge/AI-Powered-blue) ![React](https://img.shields.io/badge/React-19.0-61dafb) ![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688) ![MongoDB](https://img.shields.io/badge/MongoDB-4.5-47A248)
 
 ## 🌟 Features
 
-### Core Functionality
 - **AI-Powered Map Generation**: Generate comprehensive learning roadmaps instantly using OpenAI GPT-4o
 - **Interactive Visualization**: Node-based maps with React Flow for intuitive exploration
-- **Deep Exploration**: Click any node to expand and reveal subtopics with AI-generated content
+- **Drag & Drop Customization**: Rearrange nodes freely with smart auto-layout that prevents overlapping
+- **Deep Exploration**: Click any node to expand and reveal AI-generated subtopics
 - **Learning Levels**: Adjust complexity with Beginner, Intermediate, or Advanced filters
 - **Learning Resources**: Get curated resources, articles, and guides for each topic
-
-### User Features
 - **Authentication System**: Secure JWT-based user registration and login
-- **Save & Manage Maps**: Save your learning maps for future reference
-- **Export Functionality**: Export maps as JSON files
-- **Saved Maps Library**: Access and manage all your previously created learning maps
+- **Save & Manage Maps**: Save, export (JSON), and manage your learning maps
 - **Dark/Light Theme**: Toggle between themes for comfortable viewing
-
-### Technical Features
-- **Real-time AI Integration**: Using OpenAI GPT-4o
-- **Responsive Design**: Works seamlessly across desktop and mobile devices
-- **Modern UI**: Beautiful glass-morphism effects with Shadcn UI components
-- **Interactive Nodes**: Hover, click, and explore with smooth animations
+- **Pan & Zoom**: Navigate large maps with smooth controls and mini-map navigation
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and Yarn
-- Python 3.11+
-- MongoDB
-- OpenAI API Key
+- **Node.js** 18+ and **Yarn** (or npm)
+- **Python** 3.11+
+- **MongoDB** 4.5+
+- **OpenAI API Key** ([Get one here](https://platform.openai.com/api-keys))
 
 ### Installation
 
@@ -43,12 +34,25 @@ cd learning-map-app
 ```
 
 2. **Backend Setup**
+
 ```bash
 cd backend
-pip install -r requirements.txt
+python -m venv venv
 
-# Configure environment variables in backend/.env
-# OPENAI_API_KEY=your-api-key-here
+# Activate virtual environment
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
+
+pip install -r requirements.txt
+```
+
+Create `backend/.env`:
+```env
+MONGO_URL=mongodb://localhost:27017
+DB_NAME=learning_map_db
+CORS_ORIGINS=*
+OPENAI_API_KEY=your-openai-api-key-here
+JWT_SECRET=your-secret-jwt-key-here-min-32-chars
 ```
 
 3. **Frontend Setup**
@@ -57,31 +61,44 @@ cd frontend
 yarn install
 ```
 
-4. **Run the application**
+Create `frontend/.env`:
+```env
+REACT_APP_BACKEND_URL=http://localhost:8001
+```
 
-Backend:
+4. **Start MongoDB**
+```bash
+# Mac (homebrew):
+brew services start mongodb-community
+
+# Linux (systemctl):
+sudo systemctl start mongod
+```
+
+5. **Run the application**
+
+**Terminal 1 - Backend:**
 ```bash
 cd backend
+source venv/bin/activate
 uvicorn server:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-Frontend:
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 yarn start
 ```
 
-The app will be available at `http://localhost:3000`
+Access the app at `http://localhost:3000` and API docs at `http://localhost:8001/docs`
 
 ## 📋 API Documentation
 
-### Authentication Endpoints
+### Authentication
 
-#### Register User
+**Register:**
 ```http
 POST /api/auth/register
-Content-Type: application/json
-
 {
   "name": "John Doe",
   "email": "john@example.com",
@@ -89,204 +106,160 @@ Content-Type: application/json
 }
 ```
 
-#### Login
+**Login:**
 ```http
 POST /api/auth/login
-Content-Type: application/json
-
 {
   "email": "john@example.com",
   "password": "securepassword"
 }
 ```
 
-### Learning Map Endpoints
+### Learning Maps
 
-#### Generate Learning Map
+**Generate Map:**
 ```http
 POST /api/generate-map
 Authorization: Bearer <token>
-Content-Type: application/json
-
 {
-  "topic": "Web Development",
-  "level": "Beginner"
+  "topic": "Machine Learning",
+  "level": "Intermediate"
 }
 ```
 
-#### Expand Node
+**Expand Node:**
 ```http
 POST /api/expand-node
 Authorization: Bearer <token>
-Content-Type: application/json
-
 {
-  "node_label": "Frontend Development",
-  "topic": "Web Development",
-  "level": "Beginner"
+  "node_label": "Neural Networks",
+  "topic": "Machine Learning",
+  "level": "Intermediate"
 }
 ```
 
-#### Save Learning Map
+**Save Map:**
 ```http
 POST /api/maps/save
 Authorization: Bearer <token>
-Content-Type: application/json
-
 {
-  "topic": "Web Development",
-  "level": "Beginner",
+  "topic": "Machine Learning",
+  "level": "Intermediate",
   "nodes": [...],
   "edges": [...]
 }
 ```
 
-#### Get All Saved Maps
-```http
-GET /api/maps
-Authorization: Bearer <token>
-```
+**Get All Maps:** `GET /api/maps`  
+**Get Specific Map:** `GET /api/maps/{map_id}`  
+**Delete Map:** `DELETE /api/maps/{map_id}`
 
-#### Get Specific Map
-```http
-GET /api/maps/{map_id}
-Authorization: Bearer <token>
-```
+## 🎮 How to Use
 
-#### Export Map
-```http
-GET /api/maps/{map_id}/export
-Authorization: Bearer <token>
-```
+1. **Sign Up/Login** - Create an account or login
+2. **Generate a Map** - Enter a topic and select your knowledge level
+3. **Explore** - View, drag, zoom, and pan through your learning path
+4. **Expand Topics** - Click nodes to view details and generate subtopics
+5. **Save & Export** - Save to your library or export as JSON
 
-#### Delete Map
-```http
-DELETE /api/maps/{map_id}
-Authorization: Bearer <token>
-```
+**Pro Tips:**
+- Use the mini-map for quick navigation of large maps
+- Switch themes for better visibility
+- Expand multiple nodes to create comprehensive learning trees
 
 ## 🏗️ Architecture
 
 ### Tech Stack
 
 **Frontend:**
-- React 19.0 with React Router
-- ReactFlow for interactive node visualization
-- Shadcn UI components with Radix UI
-- Tailwind CSS for styling
-- Axios for API calls
-- Sonner for toast notifications
+- React 19.0, React Router, ReactFlow
+- Shadcn UI, Tailwind CSS
+- Axios, Sonner, Lucide React
 
 **Backend:**
-- FastAPI (Python)
-- MongoDB with Motor (async driver)
-- OpenAI integration
-- JWT for authentication
-- Bcrypt for password hashing
-
-**AI Integration:**
-- OpenAI GPT-4o 
-- Structured prompt engineering for consistent map generation
-- JSON response parsing with error handling
+- FastAPI, MongoDB, Motor
+- OpenAI GPT-4o
+- JWT, Bcrypt, Pydantic
 
 ### Project Structure
 
 ```
-/app
+learning-map-app/
 ├── backend/
-│   ├── server.py           # FastAPI application
-│   ├── requirements.txt    # Python dependencies
-│   └── .env               # Environment variables
-│
+│   ├── server.py
+│   ├── requirements.txt
+│   └── .env
 ├── frontend/
 │   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── context/       # React contexts (Auth, Theme)
-│   │   ├── pages/         # Page components
-│   │   │   ├── LandingPage.js
-│   │   │   ├── Dashboard.js
-│   │   │   ├── MapViewer.js
-│   │   │   └── SavedMaps.js
-│   │   ├── App.js
-│   │   └── App.css
+│   │   ├── components/ui/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   └── App.js
 │   ├── package.json
-│   └── tailwind.config.js
-│
+│   └── .env
 └── README.md
 ```
 
 ## 🎨 Design Philosophy
 
-### UI/UX Principles
-- **Clean & Modern**: Minimalist design with focus on content
-- **Intuitive Navigation**: Clear pathways through the application
-- **Visual Hierarchy**: Proper spacing and typography (Space Grotesk + Manrope)
-- **Accessible**: Semantic HTML and ARIA labels
-- **Responsive**: Mobile-first approach with breakpoints
+- **Clean & Modern**: Minimalist design focusing on content
+- **Responsive**: Mobile-first with fluid breakpoints
+- **Accessible**: Semantic HTML, ARIA labels, keyboard navigation
+- **Performance**: Optimized bundle, lazy loading, memoization
 
-### Color Palette
-- **Light Mode**: Soft gradients (blue-50, indigo-50, purple-50)
-- **Dark Mode**: Deep slate colors (slate-900, slate-800)
-- **Accents**: Blue and purple gradients for CTAs
-- **Cards**: Glass-morphism effects with backdrop blur
+## 🐛 Troubleshooting
 
-## 🔧 Configuration
-
-### Environment Variables
-
-**Backend (.env)**
-```env
-MONGO_URL=mongodb://localhost:27017
-DB_NAME=learning_map_db
-CORS_ORIGINS=*
-OPENAI_API_KEY=your-api-key-here
-JWT_SECRET=your-secret-key-here
+**Module not found:**
+```bash
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-**Frontend (.env)**
-```env
-REACT_APP_BACKEND_URL=http://localhost:8001
+**MongoDB connection errors:**
+```bash
+# Check status
+brew services list | grep mongodb  # Mac
+sudo systemctl status mongod       # Linux
+
+# Start MongoDB
+brew services start mongodb-community  # Mac
+sudo systemctl start mongod            # Linux
 ```
 
-## 📝 Usage Examples
+**OpenAI API errors:**
+- Verify API key in `backend/.env`
+- Check account credits and GPT-4o access
 
-### Example 1: Generate a Learning Map for "Machine Learning"
+**Frontend connection issues:**
+- Verify `REACT_APP_BACKEND_URL` in `frontend/.env`
+- Ensure backend runs on port 8001
 
-1. Navigate to Dashboard
-2. Enter "Machine Learning" as the topic
-3. Select "Intermediate" level
-4. Click "Generate Learning Map"
-5. Explore the generated nodes and connections
-6. Click any node to view details and resources
-7. Click "Expand Node" to dive deeper into subtopics
+## 🔐 Security Features
 
-### Example 2: Save and Export a Map
+- Password hashing with Bcrypt
+- JWT authentication
+- Protected routes with guards
+- Input validation with Pydantic
+- CORS configuration
+- XSS protection (React built-in)
 
-1. After generating a map, click "Save" in the map viewer
-2. Navigate to "Saved Maps" from the dashboard
-3. View all your saved maps
-4. Click "Export" to download as JSON
-5. Use the JSON file for external tools or future import
+## 🤝 Contributing
 
-
-## 🤝 Code Quality & Best Practices
-
-- **Modular Architecture**: Clean separation of concerns
-- **Type Safety**: Pydantic models for data validation
-- **Error Handling**: Comprehensive try-catch blocks
-- **Security**: JWT authentication, password hashing with bcrypt
-- **Performance**: Optimized React components, async database operations
-- **Documentation**: Well-commented code with clear function purposes
-
-## 📄 License
-
-This project is created for demonstration purposes.
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
 
 ## 🙏 Acknowledgments
 
 - OpenAI for GPT-4o API
-- React Flow team for the excellent visualization library
-- Shadcn for beautiful UI components
+- React Flow team for visualization library
+- Shadcn for UI components
+- FastAPI team for the framework
+
 ---
 
-**Built with ❤️ using AI, React, and FastAPI**
+**Built with ❤️ using AI, React, FastAPI, and MongoDB**
+
+*Transform any topic into an interactive learning journey* 🚀

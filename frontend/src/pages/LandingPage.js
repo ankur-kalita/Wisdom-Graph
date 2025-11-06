@@ -185,7 +185,7 @@ const LandingPage = () => {
                   >
                     ✕
                   </button>
-                  <CardTitle>Welcome to AI Learning Map</CardTitle>
+                  <CardTitle>Welcome to Wisdom Graph</CardTitle>
                   <CardDescription>Create an account or sign in to get started</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -287,6 +287,23 @@ const LandingPage = () => {
           )}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="py-8 text-center">
+        <p className="text-sm text-gray-600">
+          designed and developed with{' '}
+          <span className="text-red-500 animate-pulse">♥︎</span>{' '}
+          by{' '}
+          <a 
+            href="https://www.linkedin.com/in/ankur-kalita-1290ba287/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            Ankur
+          </a>
+        </p>
+      </footer>
     </div>
   );
 };

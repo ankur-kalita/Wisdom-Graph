@@ -286,7 +286,7 @@ class LearningMapAPITester:
         return success and response.get('success')
 
 def main():
-    print("🚀 Starting AI Learning Map API Tests")
+    print("🚀 Starting Wisdom Graph API Tests")
     print("=" * 50)
     
     tester = LearningMapAPITester()

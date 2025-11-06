@@ -278,7 +278,7 @@ Return ONLY JSON, no markdown:
 
 @api_router.get("/")
 async def root():
-    return {"message": "AI Learning Map API"}
+    return {"message": "Wisdom Graph API"}
 
 
 # Auth Routes
