@@ -1,0 +1,68 @@
+# ---- Operating System Files ----
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ---- Runtime Data ----
+*.pid
+*.seed
+*.pid.lock
+
+# ---- Dependency Folders ----
+node_modules/
+vendor/
+
+# ---- Environment Variables ----
+.env
+.env.*
+!.env.example
+
+# ---- Build Output ----
+dist/
+build/
+out/
+target/
+
+# ---- Cache ----
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vite/
+.svelte-kit/
+coverage/
+*.pyc
+__pycache__/
+
+# ---- IDE / Editor Files ----
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---- Temporary Files ----
+*.tmp
+*.temp
+*.bak
+
+# ---- Docker ----
+docker-compose.override.yml
+
+# ---- TypeScript ----
+*.tsbuildinfo
+
+# ---- Python ----
+.venv/
+venv/
+pip-wheel-metadata/
+
+# ---- Rust ----
+Cargo.lock (only if you're building a library)
