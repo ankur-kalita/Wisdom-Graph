@@ -547,6 +547,16 @@ async def export_map(
             detail=f"Failed to export map: {str(e)}"
         )
 
+@api_router.get("/healthz")
+async def health_check():
+    try:
+        # Ping MongoDB
+        await db.command("ping")
+        return {"status": "ok", "database": "connected"}
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        raise HTTPException(status_code=500, detail="Database not reachable")
+
 
 # Include the router in the main app
 app.include_router(api_router)
