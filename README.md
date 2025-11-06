@@ -4,6 +4,10 @@ An intelligent, interactive web application that transforms any topic into a str
 
 ![Wisdom Graph](https://img.shields.io/badge/AI-Powered-blue) ![React](https://img.shields.io/badge/React-19.0-61dafb) ![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688) ![MongoDB](https://img.shields.io/badge/MongoDB-4.5-47A248)
 
+## 🌐 Live Demo
+
+**[Try Wisdom Graph Now →](https://wisdom-graph.vercel.app)**
+
 ## 🌟 Features
 
 - **AI-Powered Map Generation**: Generate comprehensive learning roadmaps instantly using OpenAI GPT-4o
@@ -29,7 +33,7 @@ An intelligent, interactive web application that transforms any topic into a str
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
+git clone https://github.com/ankur-kalita/Wisdom-Graph.git
 cd learning-map-app
 ```
 
