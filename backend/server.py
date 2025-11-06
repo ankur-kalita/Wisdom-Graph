@@ -1,18 +1,18 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware  # Make sure this import exists
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-import os
-import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional, Dict, Any
-import uuid
 from datetime import datetime, timezone, timedelta
+from openai import AsyncOpenAI
+import os  # Make sure this import exists
+import logging
 import jwt
 import bcrypt
-from openai import AsyncOpenAI
+import uuid
 import json
 
 
@@ -37,12 +37,12 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 security = HTTPBearer()
 
-# Add CORS middleware BEFORE including router
+# Add CORS middleware - THIS MUST BE BEFORE including router
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=["https://wisdom-graph.vercel.app", "http://localhost:3000", "http://localhost:5173"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
