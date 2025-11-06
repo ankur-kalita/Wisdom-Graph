@@ -37,6 +37,15 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 security = HTTPBearer()
 
+# Add CORS middleware BEFORE including router
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -558,16 +567,8 @@ async def health_check():
         raise HTTPException(status_code=500, detail="Database not reachable")
 
 
-# Include the router in the main app
+# Include the router in the main app (near the end, before shutdown event)
 app.include_router(api_router)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 @app.on_event("shutdown")
