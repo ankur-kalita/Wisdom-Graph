@@ -90,7 +90,7 @@ const LandingPage = () => {
               </div>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-slate-900 dark:text-white">
-              AI Learning Map
+              Wisdom Graph
             </h1>
             <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-8">
               Transform any topic into a structured, interactive learning journey.

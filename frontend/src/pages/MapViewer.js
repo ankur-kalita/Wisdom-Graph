@@ -34,11 +34,11 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Custom node component
-const CustomNode = ({ data }) => {
+// Custom node component - Fixed to use memo and proper props
+const CustomNode = React.memo(({ data, id }) => {
   return (
     <>
-      <Handle type="target" position={Position.Top} />
+      <Handle type="target" position={Position.Top} id={`${id}-target`} />
       <div
         className="px-6 py-4 shadow-lg rounded-xl border-2 bg-white dark:bg-slate-800 border-blue-400 dark:border-blue-600 min-w-[200px] max-w-[300px]"
         style={{ cursor: 'pointer' }}
@@ -58,15 +58,12 @@ const CustomNode = ({ data }) => {
           </div>
         )}
       </div>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} id={`${id}-source`} />
     </>
   );
-};
+});
 
-// Memoize nodeTypes to avoid recreation on each render
-const nodeTypes = {
-  custom: CustomNode,
-};
+CustomNode.displayName = 'CustomNode';
 
 // Layout function using dagre
 const getLayoutedElements = (nodes, edges, direction = 'TB') => {
@@ -112,6 +109,9 @@ const MapViewer = () => {
   const [saving, setSaving] = useState(false);
   const [topic, setTopic] = useState('');
   const [level, setLevel] = useState('Beginner');
+
+  // Memoize nodeTypes to prevent recreation - THIS IS CRITICAL
+  const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
 
   useEffect(() => {
     const initMap = async () => {
@@ -206,33 +206,41 @@ const MapViewer = () => {
       if (response.data.success) {
         const subtopics = response.data.subtopics;
         
-        // Create new nodes for subtopics
+        // Create new nodes for subtopics with unique IDs
         const newNodes = subtopics.map((subtopic, index) => ({
-          id: subtopic.id,
+          id: `${selectedNode.id}-sub-${Date.now()}-${index}`, // Ensure unique IDs
           type: 'custom',
           data: {
             label: subtopic.label,
             description: subtopic.description,
             resources: subtopic.resources || [],
           },
-          position: {
-            x: selectedNode.position.x + (index - subtopics.length / 2) * 300,
-            y: selectedNode.position.y + 200,
-          },
+          position: { x: 0, y: 0 }, // Temporary position, will be recalculated
         }));
 
-        // Create edges from parent to subtopics
-        const newEdges = subtopics.map((subtopic, index) => ({
-          id: `e-expanded-${selectedNode.id}-${subtopic.id}`,
+        // Create edges from parent to subtopics with unique IDs
+        const newEdges = newNodes.map((newNode) => ({
+          id: `e-${selectedNode.id}-${newNode.id}`,
           source: selectedNode.id,
-          target: subtopic.id,
+          target: newNode.id,
           type: 'smoothstep',
           animated: true,
           style: { stroke: theme === 'dark' ? '#60a5fa' : '#3b82f6', strokeWidth: 2 },
         }));
 
-        setNodes((nds) => [...nds, ...newNodes]);
-        setEdges((eds) => [...eds, ...newEdges]);
+        // Combine all nodes and edges
+        const updatedNodes = [...nodes, ...newNodes];
+        const updatedEdges = [...edges, ...newEdges];
+
+        // Recalculate layout with dagre to prevent overlapping
+        const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+          updatedNodes,
+          updatedEdges
+        );
+
+        // Update nodes and edges with new layout
+        setNodes(layoutedNodes);
+        setEdges(layoutedEdges);
         
         toast.success('Node expanded successfully!');
         setSelectedNode(null);
