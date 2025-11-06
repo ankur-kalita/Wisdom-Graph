@@ -34,7 +34,7 @@ An intelligent, interactive web application that transforms any topic into a str
 1. **Clone the repository**
 ```bash
 git clone https://github.com/ankur-kalita/Wisdom-Graph.git
-cd learning-map-app
+cd Wisdom-Graph
 ```
 
 2. **Backend Setup**
